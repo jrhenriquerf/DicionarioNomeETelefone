@@ -43,6 +43,7 @@ public class Dicionario {
     }
     
     public ArrayList<Pair> gerarNomes(int quantidade){
+        //Gera os nomes e os telefones aleatoriamente e coloca-os n array
         for(int c = 0; c < quantidade; c++){
             nomesETels.add(new Pair(gerarNome(), gerarTelefone()));
         }
@@ -73,8 +74,10 @@ public class Dicionario {
         //Criando telefone aleatoriamente
         StringBuffer telefone = new StringBuffer();
         for(int i = 0; i < 14; i++){
+            //Cria um numero randomico entre 0 e 9
             int num = rand.nextInt(10);
-
+            
+            //Coloca o numero no telefone dependend da posição
             switch(i){
                 case 0: 
                     telefone.append("(");
@@ -93,14 +96,18 @@ public class Dicionario {
         return telefone.toString();
     }
         
-    private ArrayList<String> buscarNomes(String arquivo){        
+    private ArrayList<String> buscarNomes(String arquivo){
+        //Le o arquivo
         try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
             String line;
+            //Adiciona as linhas no array de nomes
             while ((line = br.readLine()) != null) {
                 nomes.add(line);
             }
-        } catch( IOException ioe ){
-            // ...
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Dicionario.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Dicionario.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return nomes;
@@ -110,7 +117,9 @@ public class Dicionario {
         boolean retorno = false;
         
         try {
+            //Pega o arquivo passado por parametro
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomArquivo + ".fibdic"));
+            //Escreve o objeto no arquivo
             oos.writeObject(nomesETels);
             retorno = true;
             oos.flush();
@@ -128,8 +137,11 @@ public class Dicionario {
         ArrayList<Pair> desserializedList = new ArrayList<Pair>();
         
         try {
+            //Pega o arquivo passado por parametro
             FileInputStream fis = new FileInputStream(nomArquivo);
+            //Pega o objeto do arquivo
             ObjectInputStream ois = new ObjectInputStream(fis);
+            //Le o objeto do arquivo e faz a conversão para o ArrayList de Pairs
             desserializedList = (ArrayList<Pair>) ois.readObject();
             ois.close();            
         } catch (FileNotFoundException ex) {
